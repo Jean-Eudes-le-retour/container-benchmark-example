@@ -43,12 +43,13 @@ def record_animations(world_config, destination_directory, controller_name):
         )
     )
     
-    # build the animator and the controller containers with their respective Dockerfile
+    # Build the recorder and the controller containers with their respective Dockerfile
     subprocess.check_output([
         "docker", "build",
-        "-t", "animator-webots",
-        "-f", "animator_Dockerfile", "."
+        "-t", "recorder-webots",
+        "-f", "recorder_Dockerfile", "."
     ])
+    # - Build the controller container from the cloned repository
     subprocess.check_output([
         "docker", "build",
         "-t", "controller-docker",
@@ -56,18 +57,19 @@ def record_animations(world_config, destination_directory, controller_name):
         f"controllers/{controller_name}"
     ])
 
+    # Run the Webots container with Popen to read the stdout
     webots_process = subprocess.Popen(
         [
             "docker", "run", "-t", "--rm",
             "--mount", f'type=bind,source={os.getcwd()}/tmp/animation,target=/usr/local/tmp/animation',
-            "-p", "3005:1234", "animator-webots"
+            "-p", "3005:1234", "recorder-webots"
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         encoding='utf-8'
     )
 
-    # read webots' stdout to know when to start the competitor's controller
+    # - Read webots' stdout in real-time to know when to start the competitor's controller
     already_launched_controller = False
     while webots_process.poll() is None:
         realtime_output = webots_process.stdout.readline()
@@ -79,7 +81,7 @@ def record_animations(world_config, destination_directory, controller_name):
         if already_launched_controller and "performance_line:" in realtime_output:
             performance = realtime_output.strip().replace("performance_line:", "")
         if ("docker" in realtime_output and "Error" in realtime_output) or ("'supervisor' controller exited with status: 1" in realtime_output):
-            subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=animator-webots" -q )"'])
+            subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=recorder-webots" -q )"'])
             subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=controller-webots" -q )"'])
     
     # Removing the temporary changes:

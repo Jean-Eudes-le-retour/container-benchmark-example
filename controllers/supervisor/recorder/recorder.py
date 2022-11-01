@@ -20,7 +20,7 @@ from datetime import datetime
 import math
 import time
 
-MAX_DURATION = 2.46
+MAX_DURATION = 3
 METRIC = "percent"
 # Constants overwritten by animation.py
 OUTPUT_FOLDER = "tmp/animation"
