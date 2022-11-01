@@ -32,7 +32,7 @@ jobs:
 
       - name: Isolate repo link
         run: |
-          solo_reference=$( grep ./competitors.txt -e '^${{ github.event.issue.number }}:.*' )
+          solo_reference=$( grep ./competitors.txt -e '^${{ github.event.issue.number }}:[[:alnum:]._:/-]*' )
           echo $solo_reference
           echo "INDIVIDUAL_REF=$solo_reference" >> $GITHUB_ENV
 

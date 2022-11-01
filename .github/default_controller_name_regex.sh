@@ -1,3 +1,5 @@
+#!/bin/bash
+
 yaml_file=$(<webots.yml)
 echo $yaml_file
 regex='dockerCompose: theia:webots-project/controllers/(.+)/'
