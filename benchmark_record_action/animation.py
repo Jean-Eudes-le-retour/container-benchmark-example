@@ -85,6 +85,8 @@ def record_animations(world_config, destination_directory, controllers):
                 subprocess.run(["docker", "run", "--rm", "controller-docker"])
                 already_launched_controller = True
         print(realtime_output.replace('\n', ''))
+        if "docker" in realtime_output and "Error" in realtime_output:
+            subprocess.run(['/bin/bash', '-c', 'docker', 'stop', '"$( docker ps -f "ancestor=animator-webots" -q )"'])
     
     # Reset world file
     with open(world_config['file'], 'w') as f:
