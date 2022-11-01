@@ -1,0 +1,6 @@
+FROM cyberbotics/webots.cloud:R2022b
+
+COPY . .
+
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["./launch_controller.sh"]
