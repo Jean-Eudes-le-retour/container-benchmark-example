@@ -20,12 +20,11 @@ from datetime import datetime
 import math
 import time
 
-# Constants overwritten by animation.py
 MAX_DURATION = 2.46
 METRIC = "percent"
+# Constants overwritten by animation.py
 OUTPUT_FOLDER = "tmp/animation"
-CONTROLLER_NAME = "animation"
-COMPETITOR_ID = 0
+CONTROLLER_NAME = "animation_0"
 
 def time_convert(time):
     minutes = time / 60
@@ -63,11 +62,12 @@ def record_performance(running, performance):
     print(f"performance_line:{performance_line}")
 
 def _message_format(performance):
-    # TODO: manage other types of score than time (not use time_convert on everything)
     if performance == 0:
         performance_string = "failure"
-    elif METRIC == "time-duration":
+    elif METRIC == "time-duration" or METRIC == "time-speed":
         performance_string = time_convert(performance)
     elif METRIC ==  "percent":
         performance_string = str(round(performance * 100, 2)) + '%'
-    return f"{COMPETITOR_ID}:{performance}:{performance_string}:{datetime.today().strftime('%Y-%m-%d')}"
+    elif METRIC == "distance":
+        performance_string = "{:.3f} m.".format(performance)
+    return f"{CONTROLLER_NAME.split('_')[1]}:{performance}:{performance_string}:{datetime.today().strftime('%Y-%m-%d')}"

@@ -21,32 +21,27 @@ def record_animations(world_config, destination_directory, controller_name):
     # Create temporary directory
     subprocess.check_output(['mkdir', '-p', destination_directory])
 
-    #  - change the robot's controller to <extern>
+    # Temporary file changes:
+    #  - World file: change the robot's controller to <extern>
     world_content = _replace_field(world_config['file'],
         (f'controller "{os.environ["DEFAULT_CONTROLLER"]}"',), ('controller "<extern>"',))
     
-    #  - change RECORD_ANIMATION to True
+    #  - Supervisor controller: change RECORD_ANIMATION to True
     supervisor_content = _replace_field("controllers/supervisor/supervisor.py",
         ("RECORD_ANIMATION = False",), ("RECORD_ANIMATION = True",))
 
-    #  - set variables for recorder.py
+    #  - Recorder library: set variables for recorder.py
     recorder_content = _replace_field(
         "controllers/supervisor/recorder/recorder.py",
         (
             'OUTPUT_FOLDER = "tmp/animation"',
-            'CONTROLLER_NAME = "animation"',
-            'COMPETITOR_ID = 0'
+            'CONTROLLER_NAME = "animation_0"'
         ),
         (
             f'OUTPUT_FOLDER = "{destination_directory}"',
-            f'CONTROLLER_NAME = "{controller_name}"',
-            f'COMPETITOR_ID = {controller_name.split("_")[1]}'
+            f'CONTROLLER_NAME = "{controller_name}"'
         )
     )
-
-    """# - change controller dockerfile to point to competitors' files
-    controller_Dockerfile_content = _replace_field("controller_Dockerfile",
-        ("controllers/edit_me/edit_me.py",), (f"controllers/{controller_name}/{controller_name}.py",))"""
     
     # build the animator and the controller containers with their respective Dockerfile
     subprocess.check_output([
@@ -87,13 +82,14 @@ def record_animations(world_config, destination_directory, controller_name):
             subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=animator-webots" -q )"'])
             subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=controller-webots" -q )"'])
     
-    # Reset world file
+    # Removing the temporary changes:
+    # - Restoring the world file
     with open(world_config['file'], 'w') as f:
         f.write(world_content)
-    # Reset supervisor file
+    # - Restoring the supervisor controller
     with open("controllers/supervisor/supervisor.py", 'w') as f:
         f.write(supervisor_content)
-    # Reset recorder file
+    # - Restoring the recorder library
     with open("controllers/supervisor/recorder/recorder.py", 'w') as f:
         f.write(recorder_content)
     
