@@ -17,7 +17,7 @@
 import subprocess
 import os
 
-def record_animations(world_config, destination_directory, controllers):
+def record_animations(world_config, destination_directory, controller_name):
     # Create temporary directory
     subprocess.check_output(['mkdir', '-p', destination_directory])
 
@@ -39,14 +39,14 @@ def record_animations(world_config, destination_directory, controllers):
         ),
         (
             f'OUTPUT_FOLDER = "{destination_directory}"',
-            f'CONTROLLER_NAME = "{controllers[0]}"',
-            f'COMPETITOR_ID = {controllers[0].split("_")[1]}'
+            f'CONTROLLER_NAME = "{controller_name}"',
+            f'COMPETITOR_ID = {controller_name.split("_")[1]}'
         )
     )
 
     """# - change controller dockerfile to point to competitors' files
     controller_Dockerfile_content = _replace_field("controller_Dockerfile",
-        ("controllers/edit_me/edit_me.py",), (f"controllers/{controllers[0]}/{controllers[0]}.py",))"""
+        ("controllers/edit_me/edit_me.py",), (f"controllers/{controller_name}/{controller_name}.py",))"""
     
     # build the animator and the controller containers with their respective Dockerfile
     subprocess.check_output([
@@ -57,8 +57,8 @@ def record_animations(world_config, destination_directory, controllers):
     subprocess.check_output([
         "docker", "build",
         "-t", "controller-docker",
-        "-f", f"controllers/{controllers[0]}/controller_Dockerfile",
-        f"controllers/{controllers[0]}"
+        "-f", f"controllers/{controller_name}/controller_Dockerfile",
+        f"controllers/{controller_name}"
     ])
 
     webots_process = subprocess.Popen(
@@ -76,11 +76,13 @@ def record_animations(world_config, destination_directory, controllers):
     already_launched_controller = False
     while webots_process.poll() is None:
         realtime_output = webots_process.stdout.readline()
+        print(realtime_output.replace('\n', ''))
         if not already_launched_controller and "waiting for connection" in realtime_output:
                 print("Webots ready for controller, launching controller container...")
                 subprocess.Popen(["docker", "run", "--rm", "controller-docker"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
                 already_launched_controller = True
-        print(realtime_output.replace('\n', ''))
+        if already_launched_controller and "performance_line:" in realtime_output:
+            performance = realtime_output.strip().replace("performance_line:", "")
         if ("docker" in realtime_output and "Error" in realtime_output) or ("'supervisor' controller exited with status: 1" in realtime_output):
             subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=animator-webots" -q )"'])
             subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=controller-webots" -q )"'])
@@ -94,9 +96,8 @@ def record_animations(world_config, destination_directory, controllers):
     # Reset recorder file
     with open("controllers/supervisor/recorder/recorder.py", 'w') as f:
         f.write(recorder_content)
-    """# Reset controller_Dockerfile
-    with open("controller_Dockerfile", 'w') as f:
-        f.write(controller_Dockerfile_content)"""
+    
+    return performance
 
 def _replace_field(file, original_fields, updated_fields):
     with open(file, 'r') as f:

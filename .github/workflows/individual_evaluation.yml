@@ -63,7 +63,9 @@ jobs:
         uses: peter-evans/create-or-update-comment@v2.0.0
         with:
           comment-id: ${{ needs.feedback_message.outputs.comment-id }}
-          body: There was a problem. Look at action logs for more details
+          body: |
+            There was a problem. Look at action logs for more details:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
 
       - name: Delete request comment

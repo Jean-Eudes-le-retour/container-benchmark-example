@@ -60,9 +60,7 @@ def record_performance(running, performance):
         message = "Benchmark completed with duration at time limit."
         performance_line = _message_format(MAX_DURATION)
 
-    with open(f"../../{OUTPUT_FOLDER}/competitors.txt", 'a') as f:
-        f.write(performance_line + '\n')
-    print("Performance saved in competitors.txt")
+    print(f"performance_line:{performance_line}")
 
 def _message_format(performance):
     # TODO: manage other types of score than time (not use time_convert on everything)
