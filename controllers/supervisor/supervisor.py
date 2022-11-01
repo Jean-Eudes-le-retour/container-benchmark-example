@@ -43,7 +43,6 @@ while robot.step(timestep) != -1 and running:
             performanceString = str(round(percent * 100, 2)) + '%'
             message = 'success:' + name + ':' + performance + ':' + performanceString
             robot.wwiSendText(message)
-            benchmarkPerformance(message, robot)
         else:
             message = "percent"
         message += ":" + str(percent)
@@ -57,7 +56,7 @@ while robot.step(timestep) != -1 and running:
 
 if RECORD_ANIMATION:
     # Write performance to file, stop recording and close Webots
-    rec.record_performance(running, time)
+    rec.record_performance(running, percent)
     rec.animation_stop(robot, timestep)
     robot.simulationQuit(0)
 else:

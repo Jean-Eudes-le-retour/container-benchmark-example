@@ -22,7 +22,7 @@ import time
 
 # Constants overwritten by animation.py
 MAX_DURATION = 2.46
-METRIC = "time-duration"
+METRIC = "percent"
 OUTPUT_FOLDER = "tmp/animation"
 CONTROLLER_NAME = "animation"
 COMPETITOR_ID = 0
@@ -65,8 +65,11 @@ def record_performance(running, performance):
     print("Performance saved in competitors.txt")
 
 def _message_format(performance):
-    if performance != 0:
-        performance_string = time_convert(performance)
-    else:
+    # TODO: manage other types of score than time (not use time_convert on everything)
+    if performance == 0:
         performance_string = "failure"
+    elif METRIC == "time-duration":
+        performance_string = time_convert(performance)
+    elif METRIC ==  "percent":
+        performance_string = str(round(performance * 100, 2)) + '%'
     return f"{COMPETITOR_ID}:{performance}:{performance_string}:{datetime.today().strftime('%Y-%m-%d')}"

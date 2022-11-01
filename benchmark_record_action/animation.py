@@ -22,44 +22,31 @@ def record_animations(world_config, destination_directory, controllers):
     subprocess.check_output(['mkdir', '-p', destination_directory])
 
     #  - change the robot's controller to <extern>
-    with open(world_config['file'], 'r') as f:
-        world_content = f.read()
-
-    with open(world_config['file'], 'w') as f:
-        f.write(
-            world_content.replace(f'controller "{os.environ["DEFAULT_CONTROLLER"]}"', 'controller "<extern>"')
-        )
+    world_content = _replace_field(world_config['file'],
+        (f'controller "{os.environ["DEFAULT_CONTROLLER"]}"',), ('controller "<extern>"',))
     
     #  - change RECORD_ANIMATION to True
-    with open("controllers/supervisor/supervisor.py", 'r') as f:
-        supervisor_content = f.read()
-
-    with open("controllers/supervisor/supervisor.py", 'w') as f:
-        f.write(
-            supervisor_content.replace("RECORD_ANIMATION = False", "RECORD_ANIMATION = True")
-        )
+    supervisor_content = _replace_field("controllers/supervisor/supervisor.py",
+        ("RECORD_ANIMATION = False",), ("RECORD_ANIMATION = True",))
 
     #  - set variables for recorder.py
-    with open("controllers/supervisor/recorder/recorder.py", 'r') as f:
-        recorder_content = f.read()
-
-    original_fields = (
-        'OUTPUT_FOLDER = "tmp/animation"',
-        'CONTROLLER_NAME = "animation"',
-        'COMPETITOR_ID = 0'
+    recorder_content = _replace_field(
+        "controllers/supervisor/recorder/recorder.py",
+        (
+            'OUTPUT_FOLDER = "tmp/animation"',
+            'CONTROLLER_NAME = "animation"',
+            'COMPETITOR_ID = 0'
+        ),
+        (
+            f'OUTPUT_FOLDER = "{destination_directory}"',
+            f'CONTROLLER_NAME = "{controllers[0]}"',
+            f'COMPETITOR_ID = {controllers[0].split("_")[1]}'
+        )
     )
-    updated_fields = (
-        f'OUTPUT_FOLDER = "{destination_directory}"',
-        f'CONTROLLER_NAME = "{controllers[0]}"',
-        f'COMPETITOR_ID = {controllers[0].split("_")[1]}'
-    )
 
-    updated_recorder = recorder_content
-    for original_field, updated_field in zip(original_fields, updated_fields):
-        updated_recorder = updated_recorder.replace(original_field, updated_field)
-    
-    with open("controllers/supervisor/recorder/recorder.py", 'w') as f:
-        f.write(updated_recorder)
+    # - change controller dockerfile entrypoint to point to competitors' files
+    #  TODO: pick a better name for shell scripts and make them better
+    launch_controller_content = _replace_field("launch_controller.sh", ("controllers/edit_me/edit_me.py",), (f"controllers/{controllers[0]}/{controllers[0]}.py",))
     
     # build the animator and the controller containers with their respective Dockerfile
     subprocess.run(["docker", "build", "-t", "animator-webots", "-f", "headless_animator_Dockerfile", "."])
@@ -82,11 +69,12 @@ def record_animations(world_config, destination_directory, controllers):
         realtime_output = webots_process.stdout.readline()
         if not already_launched_controller and "waiting for connection" in realtime_output:
                 print("Webots ready for controller, launching controller container...")
-                subprocess.run(["docker", "run", "--rm", "controller-docker"])
+                subprocess.Popen(["docker", "run", "--rm", "controller-docker"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
                 already_launched_controller = True
         print(realtime_output.replace('\n', ''))
-        if "docker" in realtime_output and "Error" in realtime_output:
-            subprocess.run(['/bin/bash', '-c', 'docker', 'stop', '"$( docker ps -f "ancestor=animator-webots" -q )"'])
+        if ("docker" in realtime_output and "Error" in realtime_output) or ("'supervisor' controller exited with status: 1" in realtime_output):
+            subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=animator-webots" -q )"'])
+            subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=controller-webots" -q )"'])
     
     # Reset world file
     with open(world_config['file'], 'w') as f:
@@ -97,4 +85,18 @@ def record_animations(world_config, destination_directory, controllers):
     # Reset recorder file
     with open("controllers/supervisor/recorder/recorder.py", 'w') as f:
         f.write(recorder_content)
+    # Reset launch_controller.sh
+    with open("launch_controller.sh", 'w') as f:
+        f.write(launch_controller_content)
+
+def _replace_field(file, original_fields, updated_fields):
+    with open(file, 'r') as f:
+        file_content = f.read()
+
+    updated_file = file_content
+    for original_field, updated_field in zip(original_fields, updated_fields):
+        updated_file = updated_file.replace(original_field, updated_field)
     
+    with open(file, 'w') as f:
+        f.write(updated_file)
+    return file_content
