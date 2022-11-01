@@ -38,7 +38,7 @@ def benchmark(config):
     world_config = config['world']
 
     # Initialise Git
-    #git.init()
+    git.init()
 
     # Get competitors
     competitors = _get_competitors()
@@ -49,7 +49,7 @@ def benchmark(config):
     _remove_competitor_controllers()
 
     # Commit and Push updates
-    #git.push(message="record and update benchmark animations")
+    git.push(message="record and update benchmark animations")
 
 
 def _get_competitors():
