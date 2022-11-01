@@ -62,7 +62,7 @@ def _get_competitors():
         competitors.append(
             Competitor(
                 id = competitor.split(":")[0],
-                controller_repository = competitor.split(":")[1].replace("\n", "")
+                controller_repository = competitor.split(":")[1].strip()
             )
         )
         return competitors
@@ -75,7 +75,7 @@ def _get_competitors():
                 competitors.append(
                     Competitor(
                         id = competitor.split(":")[0],
-                        controller_repository = competitor.split(":")[1].replace("\n", "")
+                        controller_repository = competitor.split(":")[1].strip()
                     )
                 )
 
