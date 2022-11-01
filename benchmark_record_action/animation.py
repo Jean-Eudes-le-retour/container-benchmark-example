@@ -35,11 +35,15 @@ def record_animations(world_config, destination_directory, controller_name):
         "controllers/supervisor/recorder/recorder.py",
         (
             'OUTPUT_FOLDER = "tmp/animation"',
-            'CONTROLLER_NAME = "animation_0"'
+            'CONTROLLER_NAME = "animation_0"',
+            'MAX_DURATION = 10',
+            'METRIC = "percent"'
         ),
         (
             f'OUTPUT_FOLDER = "{destination_directory}"',
-            f'CONTROLLER_NAME = "{controller_name}"'
+            f'CONTROLLER_NAME = "{controller_name}"',
+            f'MAX_DURATION = {world_config["max-duration"]}',
+            f'METRIC = "{world_config["metric"]}"'
         )
     )
     
