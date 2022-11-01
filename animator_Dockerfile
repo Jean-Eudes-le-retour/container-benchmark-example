@@ -1,5 +1,7 @@
 FROM cyberbotics/webots.cloud:R2022b
 
+# Copy all the benchmark files to launch the benchmark scenario
 COPY . .
 
+# Launch Webots in shell mode to be able to read stdout from benchmark_record_action
 ENTRYPOINT /bin/bash -c "xvfb-run -e /dev/stdout -a webots --stdout --stderr --batch --mode=fast --no-rendering ./worlds/robot_programming.wbt"

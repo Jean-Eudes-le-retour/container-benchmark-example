@@ -5,7 +5,7 @@ import os
 import sys
 
 # set to True if you want to generate an animation of your controller to ./storage/local
-RECORD_ANIMATION = True
+RECORD_ANIMATION = False
 
 if RECORD_ANIMATION:
     import recorder.recorder as rec

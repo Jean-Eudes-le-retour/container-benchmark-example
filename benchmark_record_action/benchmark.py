@@ -91,18 +91,26 @@ def _clone_competitor_controllers(competitors):
         competitor.controller_name = "competitor_" + competitor.id + "_" + competitor.username
         competitor.controller_path = os.path.join('controllers', competitor.controller_name)
 
-        # Copy controller folder to correctly named controller folder (using subversion)
-        out = subprocess.check_output(
-                [
-                    'svn', 'export', 'https://github.com/{}/{}/trunk/controllers/{}'.format(
-                        competitor.username, competitor.repository_name,
-                        os.environ['DEFAULT_CONTROLLER']
-                    ),
-                    competitor.controller_path,
-                    '--username', 'Benchmark_Evaluator', '--password', os.environ['INPUT_FETCH_TOKEN'],
-                    '--quiet', '--non-interactive', '--force'
-                ]
-            )
+        repo = 'https://{}:{}@github.com/{}/{}'.format(
+            "Benchmark_Evaluator",
+            os.environ['INPUT_FETCH_TOKEN'],
+            competitor.username,
+            competitor.repository_name
+        )
+        subprocess.check_output(f'git clone {repo} {competitor.controller_path}', shell=True)
+
+        """# Copy controller folder to correctly named controller folder (using subversion)
+        subprocess.check_output(
+            [
+                'svn', 'export', 'https://github.com/{}/{}/trunk/controllers/{}'.format(
+                    competitor.username, competitor.repository_name,
+                    os.environ['DEFAULT_CONTROLLER']
+                ),
+                competitor.controller_path,
+                '--username', 'Benchmark_Evaluator', '--password', os.environ['INPUT_FETCH_TOKEN'],
+                '--quiet', '--non-interactive', '--force'
+            ]
+        )
         
         # Rename controller files to the correct name
         for filename in os.listdir(competitor.controller_path):
@@ -112,8 +120,7 @@ def _clone_competitor_controllers(competitors):
                 os.rename(
                     f'{competitor.controller_path}/{filename}',
                     f'{competitor.controller_path}/{competitor.controller_name}{ext}'
-                    )
-
+                    )"""
 
     print("done fetching controllers")
 

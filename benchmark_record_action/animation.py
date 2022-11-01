@@ -44,13 +44,22 @@ def record_animations(world_config, destination_directory, controllers):
         )
     )
 
-    # - change controller dockerfile entrypoint to point to competitors' files
-    #  TODO: pick a better name for shell scripts and make them better
-    launch_controller_content = _replace_field("launch_controller.sh", ("controllers/edit_me/edit_me.py",), (f"controllers/{controllers[0]}/{controllers[0]}.py",))
+    """# - change controller dockerfile to point to competitors' files
+    controller_Dockerfile_content = _replace_field("controller_Dockerfile",
+        ("controllers/edit_me/edit_me.py",), (f"controllers/{controllers[0]}/{controllers[0]}.py",))"""
     
     # build the animator and the controller containers with their respective Dockerfile
-    subprocess.run(["docker", "build", "-t", "animator-webots", "-f", "headless_animator_Dockerfile", "."])
-    subprocess.run(["docker", "build", "-t", "controller-docker", "-f", "controller_Dockerfile", "."])
+    subprocess.check_output([
+        "docker", "build",
+        "-t", "animator-webots",
+        "-f", "animator_Dockerfile", "."
+    ])
+    subprocess.check_output([
+        "docker", "build",
+        "-t", "controller-docker",
+        "-f", f"controllers/{controllers[0]}/controller_Dockerfile",
+        f"controllers/{controllers[0]}"
+    ])
 
     webots_process = subprocess.Popen(
         [
@@ -85,9 +94,9 @@ def record_animations(world_config, destination_directory, controllers):
     # Reset recorder file
     with open("controllers/supervisor/recorder/recorder.py", 'w') as f:
         f.write(recorder_content)
-    # Reset launch_controller.sh
-    with open("launch_controller.sh", 'w') as f:
-        f.write(launch_controller_content)
+    """# Reset controller_Dockerfile
+    with open("controller_Dockerfile", 'w') as f:
+        f.write(controller_Dockerfile_content)"""
 
 def _replace_field(file, original_fields, updated_fields):
     with open(file, 'r') as f:
