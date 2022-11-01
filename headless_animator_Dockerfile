@@ -2,6 +2,4 @@ FROM cyberbotics/webots.cloud:R2022b
 
 COPY . .
 
-#ENTRYPOINT ["tail", "-f", "/dev/null"]
-#CMD ["webots", "--stdout", "--stderr", "./worlds/inverted_pendulum.wbt"]
-ENTRYPOINT /bin/bash -c "xvfb-run -e /dev/stdout -a webots --stdout --stderr --batch --mode=fast --no-rendering ./worlds/inverted_pendulum.wbt"
+ENTRYPOINT /bin/bash -c "xvfb-run -e /dev/stdout -a webots --stdout --stderr --batch --mode=fast --no-rendering ./worlds/robot_programming.wbt"
