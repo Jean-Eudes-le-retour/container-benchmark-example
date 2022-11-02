@@ -35,7 +35,7 @@ When an evaluation is done, Webots and the controllers are run inside [Docker co
    1. Inside the recorder_Dockerfile, rename the world file name "robot_programming.wbt" to your world name and change the "edit_me" in the controller_Dockerfile to your default controller name.
    1. If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default Webots Docker image already has the tools needed to run and compile C, C++ and Python controllers.
 
-Note that on webots.cloud, the listing title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are read at its submission to webots.cloud.
+Note that on webots.cloud, the listing title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are read at the submission to webots.cloud.
 
 ### Benchmark specific files
 1. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
