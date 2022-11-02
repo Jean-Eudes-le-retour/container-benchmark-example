@@ -31,16 +31,16 @@ You will then need to follow those steps:
 
 Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the robot node has its "synchronization" field set to FALSE.
 
-You might need to modify the two Dockerfiles at the root of the repository (recorder_Dockerfile and controller_Dockerfile) if you need a special installation environment for your simulation or controller. You should also edit the controller_Dockerfile if you change the name of the controller or if you want to use another programming language for your example controller.
+You might need to modify the two Dockerfiles at the root of the repository (recorder_Dockerfile and controller_Dockerfile) if you need a special installation environment for your simulation or controller. You should also edit the controller_Dockerfile if you changed the name of the default controller or if you want to use another programming language for your example controller (The default Webots Docker container already has the tools needed to run and compile C, C++ and Python controllers.).
 
 Note that on webots.cloud, the listing title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are read at its submission to webots.cloud.
 
 ### Benchmark specific files
 1. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
-   1. file: put the relative path to your world file
-   1. maximum-duration: the maximum duration of an evaluation in seconds. Set it not large to avoid long evaluations of broken controllers but not too short to have enough time to finish the task
-   1. metric: should be one of "percent", "time-speed", "time-duration" or "distance". It depends on how the performance is evaluated
-   1. dockerCompose: it is a special path used by the integrated IDE and GitHub actions to locate the default controller. Change "edit_me" to the name of your main controller
+   - file: put the relative path to your world file
+   - maximum-duration: the maximum duration of an evaluation in seconds. Set it not large to avoid long evaluations of broken controllers but not too short to have enough time to finish the task
+   - metric: should be one of "percent", "time-speed", "time-duration" or "distance". It depends on how the performance is evaluated
+   - dockerCompose: it is a special path used by the integrated IDE and GitHub actions to locate the default controller. Change "edit_me" to the name of your main controller
    1. Don't forget to commit your changes to save them
 1. Replace the three files of the ![preview folder](/preview) with an example animation of your benchmark [recorded from Webots](https://cyberbotics.com/doc/guide/web-animation). Keep the same names for the files: animation.json, scene.x3d and thumbnail.jpg. ![Click here](../../upload/main/preview) to upload the new files from the web interface if that is more convenient for you. 
 
@@ -51,15 +51,16 @@ Some sections from the README file are used to generate the webots.cloud benchma
 Update the ![README file](../../edit/main/README.md):
 1. Change the title and the description section to fit your new scenario.
 1. Update the different fields of the information section
-   1. Difficulty: an idea of the benchmark's complexity (for example: Middle School, High School, Bachelor, Master, PhD...)
-   1. Robot: the name of the robot used in the benchmark
-   1. Language: the programming language of the example controller
-   1. Commitment: an idea of the time required to complete the benchmark (a few minutes, a couple of hours, a couple of days...)
+   - Difficulty: an idea of the benchmark's complexity (for example: Middle School, High School, Bachelor, Master, PhD...)
+   - Robot: the name of the robot used in the benchmark
+   - Language: the programming language of the example controller
+   - Commitment: an idea of the time required to complete the benchmark (a few minutes, a couple of hours, a couple of days...)
 1. Replace the two occurrences of "ORGANIZER_NAME" in the "How to participate" section with your GitHub username and one "ORGANIZER_REPOSITORY" with your repository name
 1. Don't forget to commit your changes to save them
 
 You can submit your benchmark to [webots.cloud](https://benchmark.webots.cloud/benchmark) to share it with other people. Then you are on the website on the "Benchmark" tab, click on "Add a new benchmark" and enter the URL to your .wbt world file located in the ![worlds folder](./worlds/)
-1. When you have submitted your benchmark to webots.cloud, change the link of the shield badge at the top of the ![README file](../../edit/main/README.md) to the correct webots.cloud page. You will then be able to easily go to the webots.cloud site to see your updated changes and your competitors will have a handy link to the current leaderboard
+
+When you have submitted your benchmark to webots.cloud, change the link of the shield badge at the top of the ![README file](../../edit/main/README.md) to your own webots.cloud page. You will then be able to easily go to the webots.cloud site to see your updated changes and your competitors will have a handy link to the current leaderboard
 
 Finally, when all the previous steps have been made, you can remove this "Organizer setup" section from the README file and your benchmark should be good to go!
 
@@ -81,8 +82,8 @@ Write here a short description of your benchmark.
 
 - Difficulty: Middle School, High School, Bachelor, Master or PhD
 - Robot: robot name
-- Language: programming language of controller template
-- Commitment: amount of time needed to program controller
+- Language: programming language of the controller template
+- Commitment: amount of time needed to finish the benchmark
 
 </span>
 
