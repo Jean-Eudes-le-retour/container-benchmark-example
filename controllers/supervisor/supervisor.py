@@ -44,6 +44,7 @@ while robot.step(timestep) != -1 and running:
             performanceString = str(round(percent * 100, 2)) + '%'
             message = 'success:' + name + ':' + performance + ':' + performanceString
             robot.wwiSendText(message)
+            break
         else:
             message = "percent"
         message += ":" + str(percent)
