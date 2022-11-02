@@ -92,33 +92,6 @@ jobs:
             There was a problem when checking your repository link.
             It doesn't seem to be a benchmark repository.
 
-# Third check | id: controller_check
-
-      - name: Fetch default controller name
-
-        run: bash .github/default_controller_name_regex.sh
-        continue-on-error: true
-
-      - name: Does repo have a correctly named controller?
-
-        if: ${{ steps.benchmark_check.outcome == 'success' }}
-        id: controller_check
-        run: |
-          svn export "https://github.com/$USER_REPO/trunk/controllers/$DEFAULT_CONTROLLER" --force \
-            --username 'example@example.com' --password ${{ secrets.REPO_TOKEN }} --quiet --non-interactive
-          ls "$DEFAULT_CONTROLLER/$DEFAULT_CONTROLLER"* -U
-        continue-on-error: true
-
-      - name: If no controller found, feedback on registration issue
-
-        if: ${{ steps.controller_check.outcome == 'failure' }}
-        uses: peter-evans/create-or-update-comment@v2.0.0
-        with:
-          issue-number: ${{ github.event.issue.number }}
-          body: |
-            We could not find the controller files in your repository.
-            Please name your main controller with the default name "${{ env.DEFAULT_CONTROLLER }}"
-
 # If there was any problem:
 
       - name: Adding the "pending" label if there was any problem
@@ -126,8 +99,7 @@ jobs:
         id: if_error
         if: >
           steps.invites_check.outcome == 'failure' ||
-          steps.benchmark_check.outcome == 'failure' ||
-          steps.controller_check.outcome == 'failure'
+          steps.benchmark_check.outcome == 'failure'
         run: |
           gh api --silent \
             --method POST \
@@ -149,7 +121,7 @@ jobs:
 
       - name: Everything is in order, add feedback label
 
-        if: ${{ steps.controller_check.outcome == 'success' }}
+        if: ${{ steps.benchmark_check.outcome == 'success' }}
         run: |
           gh api --silent \
             --method POST \
@@ -164,12 +136,12 @@ jobs:
 
       - name: Add competitor to file
 
-        if: ${{ steps.controller_check.outcome == 'success' }}
+        if: ${{ steps.benchmark_check.outcome == 'success' }}
         run: echo "${{ github.event.issue.number }}:$USER_REPO" >> competitors.txt
 
       - name: Push competitor list update
 
-        if: ${{ steps.controller_check.outcome == 'success' }}      
+        if: ${{ steps.benchmark_check.outcome == 'success' }}      
         run: |
           git config --global user.name '${{ github.repository_owner }}'
           git config --global user.email '${{ github.repository_owner }}@users.noreply.github.com'
@@ -179,7 +151,7 @@ jobs:
 
       - name: Final feedback message
         uses: peter-evans/close-issue@v1
-        if: ${{ steps.controller_check.outcome == 'success' }}
+        if: ${{ steps.benchmark_check.outcome == 'success' }}
         with:
           comment: |
             #### Here comes a new challenger!
