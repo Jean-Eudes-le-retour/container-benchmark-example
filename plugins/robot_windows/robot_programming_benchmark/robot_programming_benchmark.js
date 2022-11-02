@@ -1,6 +1,4 @@
 import RobotWindow from 'https://cyberbotics.com/wwi/R2022b/RobotWindow.js';
-//import Benchmark from 'https://cyberbotics.com/wwi/testingR2022b/Benchmark.js';
-/* global sendBenchmarkRecord, showBenchmarkRecord, showBenchmarkError */
 
 window.robotWindow = new RobotWindow();
 const benchmarkName = 'Robot Programming';
@@ -16,8 +14,15 @@ window.robotWindow.receive = function(message, robot) {
     const benchmarkPerformanceString = metricToString(benchmarkPerformance);
     document.getElementById('achievement').innerHTML = benchmarkPerformanceString;
     document.getElementById('achievement').style.color = 'green';
-    /*
-    showBenchmarkPerformance(this, benchmarkName, benchmarkPerformance, benchmarkPerformanceString); */
+    // do we need a cleaner way of doing this?
+    alert(
+    `           ${benchmarkName} complete
+    Congratulations you finished the benchmark!
+    
+    Your current performance is: ${benchmarkPerformanceString}.
+    
+    If you want to submit your controller to the leaderboard, follow the instructions given by the "Register" button on the benchmark page.`
+    )
   } else
     console.log("Received unknown message for robot '" + robot + "': '" + message + "'");
 
@@ -25,14 +30,3 @@ window.robotWindow.receive = function(message, robot) {
     return (metric * 100).toFixed(2) + '%';
   }
 };
-
-function showBenchmarkPerformance(robotWindow, benchmarkName, benchmarkPerformance, benchmarkPerformanceString) {
-  robotWindow.send('success:' + benchmarkName + ':' + benchmarkPerformance + ':' + benchmarkPerformanceString);
-  /* console.log('Testing...');
-  document.getElementById('connect-button').style.color('violet');
-  console.log('Creating Benchmark instance.');
-  const benchmark = new Benchmark();
-  benchmark.printMessage('Test message.');
-  benchmark.printParentUrl(); */
-  return true;
-}
