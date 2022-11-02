@@ -4,6 +4,7 @@
 
 </span>
 
+<!-- This is the shield badge where you can replace the webots.cloud link in brackets with your personal webots.cloud page -->
 [![webots.cloud - Benchmark](https://img.shields.io/badge/webots.cloud-Benchmark-007ACC)](https://benchmark.webots.cloud/run?version=R2022b&url=https://github.com/Jean-Eudes-le-retour/bare-benchmark-example/blob/main/worlds/robot_programming.wbt&type=benchmark)
 
 ### Benchmark examples
@@ -20,9 +21,9 @@ You will then need to follow those steps:
 ### GitHub settings
 1. Go to the ![Settings tab](../../settings):
    1. Under the General section, tick the "Template repository" box so that the competitors can easily make a copy of the simulation files
-   1. Go to ![Actions settings tab](../../settings/actions) and make sure that the "Allow all actions and reusable workflow" permission is activated. This allows the different automation scripts to do their job. If it is not the case, set it correctly and save the setting
+   <!-- 1. Go to ![Actions settings tab](../../settings/actions) and make sure that the "Allow all actions and reusable workflow" permission is activated. This allows the different automation scripts to do their job. If it is not the case, set it correctly and save the setting -->
 1. You will need to setup a GitHub secret to be able to fetch your competitors' controllers:
-   1. ![Create a new Personal Access Token](../../../../settings/tokens/new). Give it a name to remember what it is for and set its "Expiration" to the end of the tournament. You can always set it to "No expiration" or recreate a token when it expires to allow the automated scripts to continue working. Tick the "repo" scope box, click "Generate token" and copy the generated code to your clipboard
+   1. ![Create a new Personal Access Token](../../../../settings/tokens/new). Give it a name to remember what it is for and set its "Expiration" to the end of the tournament. You can always set it to "No expiration" or recreate a token when it expires to allow the automated scripts to continue working. Tick the "repo" scope box, scroll down to the "Generate token" button and click it. Copy the generated code to your clipboard
    1. Go to the repo's ![secrets settings](../../settings/secrets/actions/new) to create a new repository secret. Name it "REPO_TOKEN", paste in the Personal Access Token you just created and finally click the "Add secret" button
 1. You will also need to add three custom labels for the automation scripts: "registration", "pending" and "accepted"
    1. Go to the ![Generate new labels action](../../actions/workflows/generate_labels.yml) page under the Actions tab. Click on "Run workflow" to create automatically the needed labels
@@ -94,12 +95,12 @@ Write here a short description of your benchmark.
 ## How to participate
 
 ### Create your own entry repository from the template
-1. [Click here](../../generate) to create your own repository or do it manually by clicking on the green "Use this template" button.
-1. Fill the "Repository name" field with a name for your controller.
-Choose the visibility of your controller, keep it "Public" if you don't care about people looking at your controller code otherwise set it to "Private".
-Finally, click on the green "Create repository from template".
+1. ![Click here](../../generate) to create your own repository or do it manually by clicking on the green "Use this template" button:
+   1. Fill the "Repository name" field with a name for your controller.
+   1. Choose the visibility of your controller, keep it "Public" if you don't care about people looking at your controller code otherwise set it to "Private".
+   1. Finally, click on the green "Create repository from template".
 
-You should now be on your own repository page. The URL should look like this: "https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME".  If it is not the case, go to your repositories and click on the first one from the list.
+You should now be on your **own** repository page and not the benchmark creator's repo. The URL should look like this: "https://github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME". If it is not the case, go to your repositories and click on the first one from the list. **This is important** in order to be able to use the links in the following chapters.
 
 #### If you set your repository as private, add the organizer as collaborator:
 1. ![Click here](../../settings/access) to go to the "Collaborators" setting page

@@ -157,9 +157,10 @@ jobs:
             #### Here comes a new challenger!
             You have been added to the benchmark leaderboard.
 
-            Your ranking is going to be updated at regular intervals.
+            Please note that your leaderboard score is **not** automatically updated.
+            If you want to test the last version of your controller that is in your repo's main branch,
+            add a new comment below containing the word "**run**".
 
-            If you want us to re-evaluate your controller immediately, add a new comment below containing the word "run".
-            If you want to unsubscribe your repository from the list, add a new comment below containing the word "unsubscribe".
+            If you want to unsubscribe your repository from the list, add a new comment below containing the word "**unsubscribe**".
 
             Please note that the commands might take a few minutes before posting feedback messages. You can refresh the page to make recent comments appear.
