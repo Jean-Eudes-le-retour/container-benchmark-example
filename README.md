@@ -29,9 +29,11 @@ You will then need to follow those steps:
 
 ### Webots files
 
-Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the robot node has its "synchronization" field set to FALSE.
+Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the robot node has its "synchronization" field set to FALSE. In the supervisor.py Python controller, make sure to keep all the RECORD_ANIMATION functions from this template.
 
-You might need to modify the two Dockerfiles at the root of the repository (recorder_Dockerfile and controller_Dockerfile) if you need a special installation environment for your simulation or controller. You should also edit the controller_Dockerfile if you changed the name of the default controller or if you want to use another programming language for your example controller (The default Webots Docker container already has the tools needed to run and compile C, C++ and Python controllers.).
+You should also modify the two Dockerfiles at the root of the repository (recorder_Dockerfile and controller_Dockerfile). Rename the world file name "robot_programming.wbt" in the recorder_Dockerfile to your world name and change the "edit_me" in the controller_Dockerfile to your default controller name.
+
+When an evaluation is done, Webots and the controllers are run inside [Docker containers](https://www.docker.com/resources/what-container/). If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default Webots Docker container already has the tools needed to run and compile C, C++ and Python controllers.
 
 Note that on webots.cloud, the listing title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are read at its submission to webots.cloud.
 

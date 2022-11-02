@@ -23,7 +23,7 @@ import time
 # Constants overwritten by animation.py
 MAX_DURATION = 10
 METRIC = "percent"
-OUTPUT_FOLDER = "tmp/animation"
+OUTPUT_FOLDER = "storage/"
 CONTROLLER_NAME = "animation_0"
 
 def time_convert(time):
@@ -41,7 +41,7 @@ def animation_start_and_connection_wait(supervisor):
     supervisor.simulationSetMode(supervisor.SIMULATION_MODE_PAUSE)
     time.sleep(2)
     supervisor.simulationSetMode(supervisor.SIMULATION_MODE_REAL_TIME)
-    supervisor.animationStartRecording(f"../../{OUTPUT_FOLDER}/{CONTROLLER_NAME}.html")
+    supervisor.animationStartRecording(f"../../{OUTPUT_FOLDER}{CONTROLLER_NAME}.html")
 
 def animation_stop(supervisor, timestep):
     for _ in range(50):

@@ -4,7 +4,8 @@ from controller import Supervisor
 import os
 import sys
 
-# set to True if you want to generate an animation of your controller to ./storage/local
+# Constant used for the automated benchmark evaluation script
+# - can also be used to generate an animation in storage folder if set to True
 RECORD_ANIMATION = False
 
 if RECORD_ANIMATION:
