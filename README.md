@@ -29,7 +29,11 @@ You will then need to follow those steps:
 
 ### Webots files
 
-Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window. ![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you. Note that on webots.cloud, the list title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are read at the submission of the site.
+Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the robot node has its "synchronization" field set to FALSE.
+
+You might need to modify the two Dockerfiles at the root of the repository (recorder_Dockerfile and controller_Dockerfile) if you need a special installation environment for your simulation or controller. You should also edit the controller_Dockerfile if you change the name of the controller or if you want to use another programming language for your example controller.
+
+Note that on webots.cloud, the listing title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are read at its submission to webots.cloud.
 
 ### Benchmark specific files
 1. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
@@ -113,5 +117,4 @@ Everything should be good to go, you can modify the main controller files in the
 
 The supervisor controller is the special controller that is used to evaluate your controller's performance.
 
-Webots supports multiple programming languages, see the [Webots documentation](https://www.cyberbotics.com/doc/guide/language-setup) if you are interested.
-Be sure to name your main controller like the default controller (except for the file extension) for it to be used in the leaderboard evaluation.
+Your controller is evaluated in a [Docker container](https://www.docker.com/resources/what-container/). If you want to make a more complex controller, you are free to use any library that you want but be sure to update the controller_Dockerfile with any dependencies you would need. The default Webots Docker container has the tools needed to run and compile C, C++ and Python controllers.
