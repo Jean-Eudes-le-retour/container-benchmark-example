@@ -5,7 +5,7 @@
 </span>
 
 <!-- This is the shield badge where you can replace the webots.cloud link in brackets with your personal webots.cloud page -->
-[![webots.cloud - Benchmark](https://img.shields.io/badge/webots.cloud-Benchmark-007ACC)](https://benchmark.webots.cloud/run?version=R2022b&url=https://github.com/Jean-Eudes-le-retour/bare-benchmark-example/blob/main/worlds/robot_programming.wbt&type=benchmark)
+[![webots.cloud - Benchmark](https://img.shields.io/badge/webots.cloud-Benchmark-007ACC)](https://benchmark.webots.cloud/run?version=R2022b&url=https%3A%2F%2Fgithub.com%2FJean-Eudes-le-retour%2Fcontainer-benchmark-example%2Fblob%2Fmain%2Fworlds%2Frobot_programming.wbt&type=benchmark)
 
 ### Benchmark examples
 
