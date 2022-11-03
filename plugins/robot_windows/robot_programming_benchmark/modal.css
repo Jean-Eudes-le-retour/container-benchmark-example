@@ -11,7 +11,13 @@ body {
   
   img {
     max-width: 100%;
+    vertical-align:middle;
   }
+
+  li {
+    padding: 5px;
+  }
+
   .wrapper{
     display:flex;
     flex-direction: row;
