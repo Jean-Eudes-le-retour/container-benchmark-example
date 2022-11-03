@@ -10,7 +10,7 @@ WorldInfo {
     "Benchmark objective: "
     "learn how to program a robot."
   ]
-  title "Robot Programming"
+  title "Container Robot Programming"
   window "robot_programming_benchmark"
   basicTimeStep 20
   contactProperties [
