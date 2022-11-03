@@ -17,7 +17,7 @@
 import subprocess
 import os
 
-def record_animations(world_config, destination_directory, controller_name):
+def record_animations(world_config, destination_directory, controller_name, supervisor_name):
     # Create temporary directory
     subprocess.check_output(['mkdir', '-p', destination_directory])
 
@@ -27,12 +27,12 @@ def record_animations(world_config, destination_directory, controller_name):
         (f'controller "{os.environ["DEFAULT_CONTROLLER"]}"',), ('controller "<extern>"',))
     
     #  - Supervisor controller: change RECORD_ANIMATION to True
-    supervisor_content = _replace_field("controllers/supervisor/supervisor.py",
+    supervisor_content = _replace_field(f"controllers/{supervisor_name}/{supervisor_name}.py",
         ("RECORD_ANIMATION = False",), ("RECORD_ANIMATION = True",))
 
     #  - Recorder library: set variables for recorder.py
     recorder_content = _replace_field(
-        "controllers/supervisor/recorder/recorder.py",
+        f"controllers/{supervisor_name}/recorder/recorder.py",
         (
             'OUTPUT_FOLDER = "storage/"',
             'CONTROLLER_NAME = "animation_0"',
@@ -93,10 +93,10 @@ def record_animations(world_config, destination_directory, controller_name):
     with open(world_config['file'], 'w') as f:
         f.write(world_content)
     # - Restoring the supervisor controller
-    with open("controllers/supervisor/supervisor.py", 'w') as f:
+    with open(f"controllers/{supervisor_name}/{supervisor_name}.py", 'w') as f:
         f.write(supervisor_content)
     # - Restoring the recorder library
-    with open("controllers/supervisor/recorder/recorder.py", 'w') as f:
+    with open(f"controllers/{supervisor_name}/recorder/recorder.py", 'w') as f:
         f.write(recorder_content)
     
     return performance

@@ -40,7 +40,7 @@ def time_convert(time):
 def animation_start_and_connection_wait(supervisor):
     supervisor.simulationSetMode(supervisor.SIMULATION_MODE_PAUSE)
     time.sleep(2)
-    supervisor.simulationSetMode(supervisor.SIMULATION_MODE_REAL_TIME)
+    supervisor.simulationSetMode(supervisor.SIMULATION_MODE_FAST)
     supervisor.animationStartRecording(f"../../{OUTPUT_FOLDER}{CONTROLLER_NAME}.html")
 
 def animation_stop(supervisor, timestep):

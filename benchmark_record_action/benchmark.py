@@ -23,6 +23,11 @@ import benchmark_record_action.utils.git as git
 
 DESTINATION_DIRECTORY = 'tmp/animation'
 
+try:
+    SUPERVISOR_NAME = os.environ["SUPERVISOR_NAME"]
+except:
+    SUPERVISOR_NAME = "supervisor"
+
 class Competitor:
     def __init__(self, id, controller_repository):
         self.id = id
@@ -106,7 +111,8 @@ def _record_benchmark_animation(world_config, competitor):
     performance = record_animations(
         world_config,
         DESTINATION_DIRECTORY,
-        competitor.controller_name
+        competitor.controller_name,
+        SUPERVISOR_NAME
     )
 
     # Update competitors.txt and animation
