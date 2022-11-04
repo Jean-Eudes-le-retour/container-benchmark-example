@@ -30,7 +30,15 @@ You will then need to follow those steps:
 
 ### Webots files
 
-Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the **robot node** has its **"synchronization" field set to FALSE**. In the Python supervisor controller, make sure to keep all the RECORD_ANIMATION functions from this template. If your supervisor has a name other than "supervisor.py", you can update the [variables.env file](../../edit/main/.github/variables.env) with its new name.
+Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders:
+- "worlds", for your Webots scenario
+- "controllers", with your robot and supervisor controllers
+- "protos", if you need extra PROTOs
+- "plugins", for the HTML robot window
+
+(![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you).
+
+Make sure that inside the world file the supervisor node has the "synchronization" field set to TRUE and the **robot node** has its **"synchronization" field set to FALSE**. In the Python supervisor controller, make sure to keep all the RECORD_ANIMATION functions from this template. If your supervisor has a name other than "supervisor.py", you can update the [variables.env file](../../edit/main/.github/variables.env) with its new name.
 
 Note that on webots.cloud, the listing title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are read at the submission to webots.cloud.
 
