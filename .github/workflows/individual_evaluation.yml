@@ -34,11 +34,16 @@ jobs:
         run: |
           solo_reference=$( grep ./competitors.txt -e '^${{ github.event.issue.number }}:[[:alnum:]._:/-]*' )
           echo $solo_reference
-          echo "INDIVIDUAL_REF=$solo_reference" >> $GITHUB_ENV
+          echo "INPUT_INDIVIDUAL_EVALUATION=$solo_reference" >> $GITHUB_ENV
 
       - name: Fetch default controller name
         run: bash .github/default_controller_name_regex.sh
         continue-on-error: true
+
+      - name: Fetch environment variables from file
+        run: |
+          sed "" ./.github/variables.env >> $GITHUB_ENV
+        shell: bash
 
       - name: Record and update Benchmark animations
         id: webots_test
@@ -47,11 +52,6 @@ jobs:
         env:
           INPUT_FETCH_TOKEN: ${{ secrets.REPO_TOKEN }}
           INPUT_PUSH_TOKEN: ${{ github.token }}
-          INPUT_INDIVIDUAL_EVALUATION: ${{ env.INDIVIDUAL_REF }}
-          DEFAULT_CONTROLLER: ${{ env.DEFAULT_CONTROLLER }}
-          # TODO: find an easier way to access the default values
-          SUPERVISOR_NAME: supervisor
-          PROJECT_PATH: /usr/local/webots-project
         continue-on-error: true
 
       - name: Feedback on success

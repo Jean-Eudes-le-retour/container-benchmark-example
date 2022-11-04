@@ -30,15 +30,15 @@ You will then need to follow those steps:
 
 ### Webots files
 
-Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the **robot node** has its **"synchronization" field set to FALSE**. In the supervisor.py Python controller, make sure to keep all the RECORD_ANIMATION functions from this template.
-
-When an evaluation is done, Webots and the controllers are run inside [Docker containers](https://www.docker.com/resources/what-container/). There are two Dockerfiles at the root of the repository, recorder_Dockerfile for the Webots container and controller_Dockerfile for the controller container.
-   1. Inside the recorder_Dockerfile, rename the world file name "robot_programming.wbt" to your world name and change the "edit_me" in the controller_Dockerfile to your default controller name.
-   1. If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default Webots Docker image already has the tools needed to run and compile C, C++ and Python controllers.
+Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the **robot node** has its **"synchronization" field set to FALSE**. In the Python supervisor controller, make sure to keep all the RECORD_ANIMATION functions from this template. If your supervisor has a name other than "supervisor.py", you can update the [variables.env file](../../edit/main/.github/variables.env) with its new name.
 
 Note that on webots.cloud, the listing title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are read at the submission to webots.cloud.
 
 ### Benchmark specific files
+
+1. When a controller is evaluated, Webots and the controller are run inside [Docker containers](https://www.docker.com/resources/what-container/). There are two Dockerfiles at the root of the repository, "Dockerfile" for the Webots container and "controller_Dockerfile" for the controller container which contains their setup.
+   1. Inside "Dockerfile", rename the world file name "robot_programming.wbt" to your world name and change the "edit_me" in "controller_Dockerfile" to your default controller name.
+   1. If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default webots.cloud Docker image already has the tools needed to run and compile C, C++ and Python controllers.
 1. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
    - file: put the relative path to your world file
    - maximum-duration: the maximum duration of an evaluation in seconds. Set it not large to avoid long evaluations of broken controllers but not too short to have enough time to finish the task
