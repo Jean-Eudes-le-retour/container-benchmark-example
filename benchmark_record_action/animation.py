@@ -34,13 +34,13 @@ def record_animations(world_config, destination_directory, controller_name, supe
     recorder_content = _replace_field(
         f"controllers/{supervisor_name}/recorder/recorder.py",
         (
-            'OUTPUT_FOLDER = "storage/"',
+            'OUTPUT_FOLDER = "../../storage"',
             'CONTROLLER_NAME = "animation_0"',
             'MAX_DURATION = 10',
             'METRIC = "percent"'
         ),
         (
-            f'OUTPUT_FOLDER = "{destination_directory}/"',
+            f'OUTPUT_FOLDER = "{os.environ["PROJECT_PATH"]}/{destination_directory}"',
             f'CONTROLLER_NAME = "{controller_name}"',
             f'MAX_DURATION = {world_config["max-duration"]}',
             f'METRIC = "{world_config["metric"]}"'
@@ -50,8 +50,9 @@ def record_animations(world_config, destination_directory, controller_name, supe
     # Build the recorder and the controller containers with their respective Dockerfile
     subprocess.check_output([
         "docker", "build",
+        "--build-arg", f'PROJECT_PATH={os.environ["PROJECT_PATH"]}',
         "-t", "recorder-webots",
-        "-f", "recorder_Dockerfile", "."
+        "-f", "Dockerfile", "."
     ])
     # - Build the controller container from the cloned repository
     subprocess.check_output([
@@ -62,10 +63,10 @@ def record_animations(world_config, destination_directory, controller_name, supe
     ])
 
     # Run the Webots container with Popen to read the stdout
-    webots_process = subprocess.Popen(
+    webots_docker = subprocess.Popen(
         [
             "docker", "run", "-t", "--rm",
-            "--mount", f'type=bind,source={os.getcwd()}/tmp/animation,target=/usr/local/tmp/animation',
+            "--mount", f'type=bind,source={os.getcwd()}/tmp/animation,target={os.environ["PROJECT_PATH"]}/{destination_directory}',
             "-p", "3005:1234", "recorder-webots"
         ],
         stdout=subprocess.PIPE,
@@ -75,8 +76,8 @@ def record_animations(world_config, destination_directory, controller_name, supe
 
     # - Read webots' stdout in real-time to know when to start the competitor's controller
     already_launched_controller = False
-    while webots_process.poll() is None:
-        realtime_output = webots_process.stdout.readline()
+    while webots_docker.poll() is None:
+        realtime_output = webots_docker.stdout.readline()
         print(realtime_output.replace('\n', ''))
         if not already_launched_controller and "waiting for connection" in realtime_output:
                 print("Webots ready for controller, launching controller container...")

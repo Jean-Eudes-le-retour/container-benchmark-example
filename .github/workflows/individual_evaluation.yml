@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: Feedback on individual evaluation
         id: feedback
-        uses: peter-evans/create-or-update-comment@v2.0.0
+        uses: peter-evans/create-or-update-comment@v2.1.0
         with:
           issue-number: ${{ github.event.issue.number }}
           body: Individual re-evaluation in progress...
@@ -43,24 +43,27 @@ jobs:
       - name: Record and update Benchmark animations
         id: webots_test
         run: |
-          python3 -m benchmark_record_action
+          python3 -u -m benchmark_record_action
         env:
           INPUT_FETCH_TOKEN: ${{ secrets.REPO_TOKEN }}
           INPUT_PUSH_TOKEN: ${{ github.token }}
           INPUT_INDIVIDUAL_EVALUATION: ${{ env.INDIVIDUAL_REF }}
           DEFAULT_CONTROLLER: ${{ env.DEFAULT_CONTROLLER }}
+          # TODO: find an easier way to access the default values
+          SUPERVISOR_NAME: square_path_supervisor
+          PROJECT_PATH: /usr/local/webots-project
         continue-on-error: true
 
       - name: Feedback on success
         if: ${{ steps.webots_test.outcome == 'success' }}
-        uses: peter-evans/create-or-update-comment@v2.0.0
+        uses: peter-evans/create-or-update-comment@v2.1.0
         with:
           comment-id: ${{ needs.feedback_message.outputs.comment-id }}
           body: Re-evaluation finished! The leaderboard is up to date.
 
       - name: Feedback on failure
         if: ${{ steps.webots_test.outcome == 'failure' }}
-        uses: peter-evans/create-or-update-comment@v2.0.0
+        uses: peter-evans/create-or-update-comment@v2.1.0
         with:
           comment-id: ${{ needs.feedback_message.outputs.comment-id }}
           body: |

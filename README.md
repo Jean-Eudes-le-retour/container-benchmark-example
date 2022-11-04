@@ -30,7 +30,7 @@ You will then need to follow those steps:
 
 ### Webots files
 
-Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the robot node has its "synchronization" field set to FALSE. In the supervisor.py Python controller, make sure to keep all the RECORD_ANIMATION functions from this template.
+Replace/add all the files needed for your Webots simulation at the root of the repository, notably the folders "worlds", "controllers" and the folder "plugins" needed for the robot window (![Click here](../../upload/main) to upload the new files from the web interface if it is more convenient for you). Make sure that in the world file the supervisor node has the "synchronization" field set to TRUE and the **robot node** has its **"synchronization" field set to FALSE**. In the supervisor.py Python controller, make sure to keep all the RECORD_ANIMATION functions from this template.
 
 When an evaluation is done, Webots and the controllers are run inside [Docker containers](https://www.docker.com/resources/what-container/). There are two Dockerfiles at the root of the repository, recorder_Dockerfile for the Webots container and controller_Dockerfile for the controller container.
    1. Inside the recorder_Dockerfile, rename the world file name "robot_programming.wbt" to your world name and change the "edit_me" in the controller_Dockerfile to your default controller name.

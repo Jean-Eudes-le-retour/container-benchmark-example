@@ -20,7 +20,7 @@ jobs:
       GH_TOKEN: ${{ secrets.REPO_TOKEN }}
     steps:
       - name: Verification started message
-        uses: peter-evans/create-or-update-comment@v2.0.0
+        uses: peter-evans/create-or-update-comment@v2.1.0
         with:
           issue-number: ${{ github.event.issue.number }}
           body: Verification started...
@@ -63,7 +63,7 @@ jobs:
       - name: If no invites, problem with collab or link syntax
 
         if: ${{ steps.invites_check.outcome == 'failure' }}
-        uses: peter-evans/create-or-update-comment@v2.0.0
+        uses: peter-evans/create-or-update-comment@v2.1.0
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
@@ -85,7 +85,7 @@ jobs:
       - name: If not a benchmark repo, feedback on registration issue
 
         if: ${{ steps.benchmark_check.outcome == 'failure' }}
-        uses: peter-evans/create-or-update-comment@v2.0.0
+        uses: peter-evans/create-or-update-comment@v2.1.0
         with:
           issue-number: ${{ github.event.issue.number }}
           body: |
@@ -110,7 +110,7 @@ jobs:
       - name: Prompt on how to retry
 
         if: ${{ steps.if_error.outcome == 'success' }}
-        uses: peter-evans/create-or-update-comment@v2.0.0
+        uses: peter-evans/create-or-update-comment@v2.1.0
         with:
           issue-number: ${{ github.event.issue.number }}
           body: >
