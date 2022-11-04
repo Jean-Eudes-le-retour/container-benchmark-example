@@ -50,7 +50,7 @@ jobs:
           INPUT_INDIVIDUAL_EVALUATION: ${{ env.INDIVIDUAL_REF }}
           DEFAULT_CONTROLLER: ${{ env.DEFAULT_CONTROLLER }}
           # TODO: find an easier way to access the default values
-          SUPERVISOR_NAME: square_path_supervisor
+          SUPERVISOR_NAME: supervisor
           PROJECT_PATH: /usr/local/webots-project
         continue-on-error: true
 
