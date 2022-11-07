@@ -21,7 +21,7 @@ jobs:
         run: sed -i '/^${{ github.event.issue.number }}:.*/d' competitors.txt
 
       - name: Remove user animation from storage
-        run: rm -r ./wb_animation_${{ github.event.issue.number }}
+        run: rm -rf storage/wb_animation_${{ github.event.issue.number }}
 
       - name: Push changes
         run: |

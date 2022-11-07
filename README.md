@@ -45,8 +45,9 @@ Note that on webots.cloud, the listing title of the benchmark and its hover desc
 ### Benchmark specific files
 
 1. When a controller is evaluated, Webots and the controller are run inside [Docker containers](https://www.docker.com/resources/what-container/). There are two Dockerfiles at the root of the repository, "Dockerfile" for the Webots container and "controller_Dockerfile" for the controller container which contains their setup.
-   1. Inside "Dockerfile", rename the world file name "robot_programming.wbt" to your world name and change the "edit_me" in "controller_Dockerfile" to your default controller name.
-   1. If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default webots.cloud Docker image already has the tools needed to run and compile C, C++ and Python controllers.
+   1. Inside "Dockerfile", rename the world file name "robot_programming.wbt" to your world name
+   1. Inside "controller_Dockerfile", change "edit_me" to your default controller name
+   1. If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default webots.cloud Docker image already has the tools needed to run and compile C, C++ and Python controllers
 1. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
    - file: put the relative path to your world file
    - maximum-duration: the maximum duration of an evaluation in seconds. Set it not large to avoid long evaluations of broken controllers but not too short to have enough time to finish the task
@@ -67,6 +68,7 @@ Update the ![README file](../../edit/main/README.md):
    - Language: the programming language of the example controller
    - Commitment: an idea of the time required to complete the benchmark (a few minutes, a couple of hours, a couple of days...)
 1. Replace the two occurrences of "ORGANIZER_NAME" in the "How to participate" section with your GitHub username and one "ORGANIZER_REPOSITORY" with your repository name
+1. Replace the issue form registration link <!-- TODO: complete this instruction -->
 1. Don't forget to commit your changes to save them
 
 You can submit your benchmark to [webots.cloud](https://benchmark.webots.cloud/benchmark) to share it with other people. Then you are on the website on the "Benchmark" tab, click on "Add a new benchmark" and enter the URL to your .wbt world file located in the ![worlds folder](./worlds/)
