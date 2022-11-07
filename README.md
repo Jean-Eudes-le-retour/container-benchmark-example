@@ -68,7 +68,6 @@ Update the ![README file](../../edit/main/README.md):
    - Language: the programming language of the example controller
    - Commitment: an idea of the time required to complete the benchmark (a few minutes, a couple of hours, a couple of days...)
 1. Replace the two occurrences of "ORGANIZER_NAME" in the "How to participate" section with your GitHub username and one "ORGANIZER_REPOSITORY" with your repository name
-1. Replace the issue form registration link <!-- TODO: complete this instruction -->
 1. Don't forget to commit your changes to save them
 
 You can submit your benchmark to [webots.cloud](https://benchmark.webots.cloud/benchmark) to share it with other people. Then you are on the website on the "Benchmark" tab, click on "Add a new benchmark" and enter the URL to your .wbt world file located in the ![worlds folder](./worlds/)
