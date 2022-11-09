@@ -23,11 +23,6 @@ import benchmark_record_action.utils.git as git
 
 DESTINATION_DIRECTORY = 'tmp/animation'
 
-try:
-    SUPERVISOR_NAME = os.environ["SUPERVISOR_NAME"]
-except:
-    SUPERVISOR_NAME = "supervisor"
-
 class Competitor:
     def __init__(self, id, controller_repository):
         self.id = id
@@ -91,44 +86,25 @@ def _clone_competitor_controller(competitor):
 def _run_competitor_controller(world_config, competitor):
     print("\nRunning competitor's controller...")
 
-    # Save original world file
-    with open(world_config['file'], 'r') as f:
-        world_content = f.read()
-
-    # Run controller and record animation
-    _record_benchmark_animation(world_config, competitor)
-
-    # Revert to original world file
-    with open(world_config['file'], 'w') as f:
-        f.write(world_content)
-
-    print("done running competitor's controller")
-
-
-def _record_benchmark_animation(world_config, competitor):
-
     # Record animation and return performance
     performance = record_animations(
         world_config,
         DESTINATION_DIRECTORY,
-        competitor.controller_name,
-        SUPERVISOR_NAME
+        competitor.controller_name
     )
 
-    # Update competitors.txt and animation
-    _refresh_perf_and_animation(performance, competitor)
+    _update_animation_files(competitor)
+    _update_performance_line(performance, competitor)
 
     # Remove tmp files
     shutil.rmtree('tmp')
 
-    print('done recording animations')
+    print('done running controller and recording animations')
 
-def _refresh_perf_and_animation(performance, competitor):
-
-    # Move animations and format new performance
-    updated_competitor = _move_animations_and_format_perf(performance, competitor)
+def _update_performance_line(performance, competitor):
 
     # Only change the requested competitor's performance
+    updated_competitor_line = f"{competitor.id}:{competitor.controller_repository}:{performance}"
     tmp_competitors = ""
     with open('competitors.txt', 'r') as f:
         for line in f:
@@ -137,7 +113,7 @@ def _refresh_perf_and_animation(performance, competitor):
             test_id = line.split(':')[0]
 
             if test_id == competitor.id:
-                new_line = updated_competitor.strip()
+                new_line = updated_competitor_line.strip()
             else:
                 new_line = line
             # concatenate the new string and add an end-line break
@@ -146,13 +122,8 @@ def _refresh_perf_and_animation(performance, competitor):
     with open('competitors.txt', 'w') as f:
         f.write(tmp_competitors)
 
-def _move_animations_and_format_perf(performance, competitor):
-    
-    _, performance_value, performance_string, date = performance.split(':')
+def _update_animation_files(competitor):
 
-    # performance
-    updated_competitor = f"{competitor.id}:{competitor.controller_repository}:{performance_value}:{performance_string}:{date}"
-    
     # animations
     new_destination_directory = os.path.join('storage', 'wb_animation_' + competitor.id)
     # remove old animation
@@ -163,7 +134,7 @@ def _move_animations_and_format_perf(performance, competitor):
     
     _cleanup_storage_files(new_destination_directory)
     
-    return updated_competitor
+    return 
 
 def _cleanup_storage_files(directory):
     if Path(directory).exists():
