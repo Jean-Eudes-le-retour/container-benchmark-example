@@ -1,4 +1,4 @@
-FROM cyberbotics/webots.cloud:R2022b
+FROM leoduggan/webots.cloud-anim-edit:latest
 
 # Copy all the benchmark files into default PROJECT_PATH from Docker container
 ARG PROJECT_PATH

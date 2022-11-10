@@ -68,7 +68,7 @@ def record_animations(world_config, destination_directory, controller_name):
     # Run Webots container with Popen to read the stdout
     webots_docker = subprocess.Popen(
         [
-            "docker", "run", "-t", "--rm",
+            "docker", "run", "-t", "--rm", "--init",
             "--mount", f'type=bind,source={os.getcwd()}/tmp/animation,target={os.environ["PROJECT_PATH"]}/{destination_directory}',
             "-p", "3005:1234",
             "--env", "CI=true",
@@ -99,9 +99,10 @@ def record_animations(world_config, destination_directory, controller_name):
         elif already_launched_controller and "Controller timeout" in realtime_output:
             timeout = True
             break
-    
+
     print("Closing the containers...")
-    subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=recorder-webots" -q )"'])
+    # Closing Webots with SIGINT to trigger animation export
+    subprocess.run(['/bin/bash', '-c', 'docker exec "$( docker ps -f "ancestor=recorder-webots" -q )" pkill -SIGINT webots-bin'])
     subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=controller-webots" -q )"'])
 
     # *Restoring temporary file changes

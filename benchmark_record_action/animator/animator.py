@@ -32,10 +32,9 @@ def main():
         if step_counter >= step_max:
             break
 
-    # If the time is up, stop recording and close Webots
+    # If the time is up, stop recording and signal script to close Webots
     supervisor.animationStopRecording()
     print("Controller timeout")
-    #supervisor.simulationQuit(0)
 
 if __name__ == '__main__':
     main()
