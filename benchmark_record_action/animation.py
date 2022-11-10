@@ -87,7 +87,7 @@ def record_animations(world_config, destination_directory, controller_name):
         realtime_output = webots_docker.stdout.readline()
         print(realtime_output.replace('\n', ''))
         if not already_launched_controller and "waiting for connection" in realtime_output:
-                print("Webots ready for controller, launching controller container...")
+                print("META SCRIPT: Webots ready for controller, launching controller container...")
                 subprocess.Popen(
                     ["docker", "run", "--rm", "controller-docker"],
                     stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
@@ -100,7 +100,7 @@ def record_animations(world_config, destination_directory, controller_name):
             timeout = True
             break
     
-    # Got what we need, kill the containers
+    print("Closing the containers...")
     subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=recorder-webots" -q )"'])
     subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=controller-webots" -q )"'])
 
