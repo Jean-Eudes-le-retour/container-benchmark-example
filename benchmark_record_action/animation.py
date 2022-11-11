@@ -121,7 +121,8 @@ def record_animations(world_config, destination_directory, controller_name):
         elif already_launched_controller and "Controller timeout" in realtime_output:
             timeout = True
             break
-    if webots_docker.returncode != 0:
+    if webots_docker.returncode:
+        print(f"ERROR: Webots container exited with code {webots_docker.returncode}")
         raise Exception("Error while running the Webots simulation")
 
     print("Closing the containers...")
