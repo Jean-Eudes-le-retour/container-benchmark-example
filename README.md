@@ -7,10 +7,10 @@
 <!-- This is the shield badge where you can replace the webots.cloud link in brackets with your personal webots.cloud page -->
 [![webots.cloud - Benchmark](https://img.shields.io/badge/webots.cloud-Benchmark-007ACC)](https://benchmark.webots.cloud/run?version=R2022b&url=https%3A%2F%2Fgithub.com%2FJean-Eudes-le-retour%2Fcontainer-benchmark-example%2Fblob%2Fmain%2Fworlds%2Frobot_programming.wbt&type=benchmark)
 
-### Benchmark examples
+## Benchmark examples
 
-- https://github.com/cyberbotics/robot-programming-benchmark-disabled 
-- https://github.com/cyberbotics/inverted-pendulum-benchmark-disabled 
+- <https://github.com/cyberbotics/robot-programming-benchmark-disabled>
+- <https://github.com/cyberbotics/inverted-pendulum-benchmark-disabled>
 
 ## Organizer setup
 
@@ -19,6 +19,7 @@ Here is a quick summary of the instructions for somebody who wants to organize a
 You will then need to follow those steps:
 
 ### GitHub settings
+
 1. Go to the ![Settings tab](../../settings):
    1. Under the General section, tick the "Template repository" box so that the competitors can easily make a copy of the simulation files
    <!-- 1. Go to ![Actions settings tab](../../settings/actions) and make sure that the "Allow all actions and reusable workflow" permission is activated. This allows the different automation scripts to do their job. If it is not the case, set it correctly and save the setting -->
@@ -42,25 +43,28 @@ You will then need to follow those steps:
    - Note that on webots.cloud, the listing title of the benchmark and its hover description are defined by the Webots world file: more specifically, the WorldInfo node has a "title" and an "info" field which are parsed at the submission to webots.cloud.
 
 1. In order for the automated script to recover the competitors' score correctly, the supervisor needs to print the final performance of the robot controller in the format "performance_line:score" to stdout. "score" is a float value that depends on the metric used: it's a value between 0 and 1 for "percent", a time in seconds for "time-duration" and "time-speed" or a distance in meters for "distance".
+
 ### Benchmark specific files
 
 1. When a controller is evaluated, Webots and the controller are run inside [Docker containers](https://www.docker.com/resources/what-container/). There are two Dockerfiles at the root of the repository, "Dockerfile" for the Webots container and "controller_Dockerfile" for the controller container which contains their setup.
-   1. Inside "Dockerfile", rename the world file name "robot_programming.wbt" to your world name
-   1. Inside "controller_Dockerfile", change "edit_me" to your default controller name
-   1. If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default webots.cloud Docker image already has the tools needed to compile and run C, C++ and Python controllers
+   - If you want to use the default Dockerfiles:
+      1. Inside "Dockerfile", rename the world file name "robot_programming.wbt" to your world name
+      1. Inside "controller_Dockerfile", change "edit_me" to your default controller name
+   - If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default webots.cloud Docker image already has the tools needed to compile and run C, C++ and Python controllers
 1. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
    - file: put the relative path to your world file
    - maximum-duration: the maximum duration of an evaluation in seconds. Set it not large to avoid long evaluations of broken controllers but not too short to have enough time to finish the task
    - metric: should be one of "percent", "time-speed", "time-duration" or "distance". It depends on how the performance is evaluated
    - dockerCompose: it is a special path used by the integrated IDE and GitHub actions to locate the default controller. Change "edit_me" to the name of your main controller
    1. Don't forget to commit your changes to save them
-1. Replace the three files of the ![preview folder](/preview) with an example animation of your benchmark [recorded from Webots](https://cyberbotics.com/doc/guide/web-animation). Keep the same names for the files: animation.json, scene.x3d and thumbnail.jpg. ![Click here](../../upload/main/preview) to upload the new files to the preview folder from the web interface if that is more convenient for you. 
+1. Replace the three files of the ![preview folder](/preview) with an example animation of your benchmark [recorded from Webots](https://cyberbotics.com/doc/guide/web-animation). Keep the same names for the files: animation.json, scene.x3d and thumbnail.jpg. ![Click here](../../upload/main/preview) to upload the new files to the preview folder from the web interface if that is more convenient for you.
 
 ### README update
 
 Some sections from the README file are used to generate the webots.cloud benchmark page: the title, the description and an information table. Make sure to edit them while keeping them inside their respective \<span\> tags.
 
 Update the ![README file](../../edit/main/README.md):
+
 1. Change the title and the description section to fit your new scenario.
 1. Update the different fields of the information section
    - Difficulty: an idea of the benchmark's complexity (for example: Middle School, High School, Bachelor, Master, PhD...)
@@ -104,6 +108,7 @@ Write here a short description of your benchmark.
 ## How to participate
 
 ### Create your own entry repository from the template
+
 1. ![Click here](../../generate) to create your own repository or do it manually by clicking on the green "Use this template" button:
    1. Fill the "Repository name" field with a name for your controller.
    1. Choose the visibility of your controller, keep it "Public" if you don't care about people looking at your controller code otherwise set it to "Private".
@@ -111,13 +116,15 @@ Write here a short description of your benchmark.
 
 You should now be on your **own** repository page and not the benchmark creator's repo. The URL should look like this: "https://<i></i>github.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME". If it is not the case, go to your repositories and click on the first one from the list. **This is important** in order to be able to use the links in the following chapters.
 
-#### If you set your repository as private, add the organizer as collaborator:
+#### If you set your repository as private, add the organizer as collaborator
+
 1. ![Click here](../../settings/access) to go to the "Collaborators" setting page
    1. You might need to confirm the access by re-entering your GitHub password.
 1. You should see a "Manage access" box where you will see the current collaborators of the repo.
 Click on the "Add people" and search for "ORGANIZER_NAME". When you found the organizer, add them to the repository.
 
 ### Register yourself by using posting an issue
+
 1. Go back to the main page of your repository if that is not the case and copy the repository URL from the address bar to your clipboard.
 1. ![Click here](https://github.com/ORGANIZER_NAME/ORGANIZER_REPOSITORY/issues/new?assignees=&labels=registration&template=registration_form.yml&title=Registration+to+benchmark) to go to the organizer repository and start your registration. If it doesn't work, you can do it manually by going to the organizer's repository, then to the "Issues" tab, creating a new issue and choosing "Registration to benchmark".
 1. Paste your repository URL in the URL field and click the "Submit new issue" button.
