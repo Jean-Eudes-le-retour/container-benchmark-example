@@ -64,11 +64,7 @@ def record_animations(world_config, destination_directory, controller_name):
         stderr=subprocess.STDOUT,
         encoding='utf-8'
     )
-    while recorder_build.poll() is None:
-        realtime_output = recorder_build.stdout.readline()
-        print(realtime_output.replace('\n', ''))
-    if recorder_build.returncode != 0:
-        raise Exception("Error while building the Webots container")
+    _get_realtime_stdout(recorder_build, "Error while building the recorder container")
     
     controller_build = subprocess.Popen(
         [
@@ -81,11 +77,7 @@ def record_animations(world_config, destination_directory, controller_name):
         stderr=subprocess.STDOUT,
         encoding='utf-8'
     )
-    while controller_build.poll() is None:
-        realtime_output = controller_build.stdout.readline()
-        print(realtime_output.replace('\n', ''))
-    if controller_build.returncode != 0:
-        raise Exception("Error while building the controller container")
+    _get_realtime_stdout(controller_build, "Error while building the controller container")
     
     # Run Webots container with Popen to read the stdout
     webots_docker = subprocess.Popen(
@@ -107,7 +99,8 @@ def record_animations(world_config, destination_directory, controller_name):
     
     while webots_docker.poll() is None:
         realtime_output = webots_docker.stdout.readline()
-        print(realtime_output.replace('\n', ''))
+        if realtime_output:
+            print(realtime_output.strip())
         if not already_launched_controller and "waiting for connection" in realtime_output:
                 print("META SCRIPT: Webots ready for controller, launching controller container...")
                 subprocess.Popen(
@@ -180,3 +173,11 @@ def _time_convert(time):
 def _get_container_id(container_name):
     container_id = subprocess.check_output(['docker', 'ps', '-f', f'ancestor={container_name}', '-q']).decode('utf-8').strip()
     return container_id
+
+def _get_realtime_stdout(process, error_message):
+    while process.poll() is None:
+        realtime_output = process.stdout.readline()
+        if realtime_output:
+            print(realtime_output.strip())
+    if process.returncode != 0:
+        raise Exception(error_message)
