@@ -57,7 +57,8 @@ def record_animations(world_config, destination_directory, controller_name):
             "docker", "build",
             "--build-arg", f'PROJECT_PATH={os.environ["PROJECT_PATH"]}',
             "-t", "recorder-webots",
-            "-f", "Dockerfile", "."
+            "-f", "Dockerfile",
+            "."
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -66,6 +67,8 @@ def record_animations(world_config, destination_directory, controller_name):
     while recorder_build.poll() is None:
         realtime_output = recorder_build.stdout.readline()
         print(realtime_output.replace('\n', ''))
+    if recorder_build.returncode != 0:
+        raise Exception("Error while building the Webots container")
     
     controller_build = subprocess.Popen(
         [
@@ -81,7 +84,9 @@ def record_animations(world_config, destination_directory, controller_name):
     while controller_build.poll() is None:
         realtime_output = controller_build.stdout.readline()
         print(realtime_output.replace('\n', ''))
-
+    if controller_build.returncode != 0:
+        raise Exception("Error while building the controller container")
+    
     # Run Webots container with Popen to read the stdout
     webots_docker = subprocess.Popen(
         [
@@ -116,6 +121,8 @@ def record_animations(world_config, destination_directory, controller_name):
         elif already_launched_controller and "Controller timeout" in realtime_output:
             timeout = True
             break
+    if webots_docker.returncode != 0:
+        raise Exception("Error while running the Webots simulation")
 
     print("Closing the containers...")
     webots_container_id = _get_container_id("recorder-webots")
