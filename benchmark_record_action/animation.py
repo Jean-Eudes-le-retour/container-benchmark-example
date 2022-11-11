@@ -52,18 +52,35 @@ def record_animations(world_config, destination_directory, controller_name):
         f.write(updated_file + animation_recorder_vrml)
     
     # Building the Docker containers
-    subprocess.check_output([
-        "docker", "build",
-        "--build-arg", f'PROJECT_PATH={os.environ["PROJECT_PATH"]}',
-        "-t", "recorder-webots",
-        "-f", "Dockerfile", "."
-    ])
-    subprocess.check_output([
-        "docker", "build",
-        "-t", "controller-docker",
-        "-f", f"controllers/{controller_name}/controller_Dockerfile",
-        f"controllers/{controller_name}"
-    ])
+    recorder_build = subprocess.Popen(
+        [
+            "docker", "build",
+            "--build-arg", f'PROJECT_PATH={os.environ["PROJECT_PATH"]}',
+            "-t", "recorder-webots",
+            "-f", "Dockerfile", "."
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        encoding='utf-8'
+    )
+    while recorder_build.poll() is None:
+        realtime_output = recorder_build.stdout.readline()
+        print(realtime_output.replace('\n', ''))
+    
+    controller_build = subprocess.Popen(
+        [
+            "docker", "build",
+            "-t", "controller-docker",
+            "-f", f"controllers/{controller_name}/controller_Dockerfile",
+            f"controllers/{controller_name}"
+        ],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        encoding='utf-8'
+    )
+    while controller_build.poll() is None:
+        realtime_output = controller_build.stdout.readline()
+        print(realtime_output.replace('\n', ''))
 
     # Run Webots container with Popen to read the stdout
     webots_docker = subprocess.Popen(
