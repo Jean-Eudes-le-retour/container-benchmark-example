@@ -17,11 +17,10 @@
 import os
 import shutil
 from pathlib import Path
-import subprocess
 from benchmark_record_action.animation import record_animations
 import benchmark_record_action.utils.git as git
 
-DESTINATION_DIRECTORY = 'tmp/animation'
+TMP_DESTINATION_DIRECTORY = 'tmp/animation'
 
 class Competitor:
     def __init__(self, id, controller_repository):
@@ -78,7 +77,8 @@ def _clone_competitor_controller(competitor):
         competitor.username,
         competitor.repository_name
     )
-    subprocess.check_output(f'git clone {repo} {competitor.controller_path}', shell=True)
+
+    git.clone(repo, competitor.controller_path)
 
     print("done fetching repo")
 
@@ -87,12 +87,12 @@ def _run_competitor_controller(world_config, competitor):
 
     animator_controller_source = os.path.join('benchmark_record_action', 'animator')
     animator_controller_destination = os.path.join('controllers', 'animator')
-    shutil.copytree(animator_controller_source, animator_controller_destination)
+    _copy_directory(animator_controller_source, animator_controller_destination)
 
     # Record animation and return performance
     performance = record_animations(
         world_config,
-        DESTINATION_DIRECTORY,
+        TMP_DESTINATION_DIRECTORY,
         competitor.controller_name
     )
 
@@ -100,8 +100,8 @@ def _run_competitor_controller(world_config, competitor):
     _update_performance_line(performance, competitor)
 
     # Remove tmp files
-    shutil.rmtree('tmp')
-    shutil.rmtree(animator_controller_destination)
+    _remove_directory('tmp')
+    _remove_directory(animator_controller_destination)
 
     print('done running controller and recording animations')
 
@@ -127,17 +127,15 @@ def _update_performance_line(performance, competitor):
         f.write(tmp_competitors)
 
 def _update_animation_files(competitor):
-
-    # animations
     new_destination_directory = os.path.join('storage', 'wb_animation_' + competitor.id)
+
     # remove old animation
-    subprocess.check_output(['rm', '-r', '-f', new_destination_directory])
+    _remove_directory(new_destination_directory)
     # replace by new animation
-    subprocess.check_output(['mkdir', '-p', new_destination_directory])
-    subprocess.check_output(f'mv {DESTINATION_DIRECTORY}/{competitor.controller_name}.* {new_destination_directory}', shell=True)
+    _copy_directory(TMP_DESTINATION_DIRECTORY, new_destination_directory)
+    _remove_directory(TMP_DESTINATION_DIRECTORY)
     
     _cleanup_storage_files(new_destination_directory)
-    
     return 
 
 def _cleanup_storage_files(directory):
@@ -151,9 +149,16 @@ def _cleanup_storage_files(directory):
             elif path.endswith('.x3d'):
                 os.rename(path, directory + '/scene.x3d')
 
-
 def _remove_competitor_controller():
     for path in Path('controllers').glob('*'):
         controller = str(path).split('/')[1]
         if controller.startswith('competitor'):
             shutil.rmtree(path)
+
+def _remove_directory(directory):
+    if Path(directory).exists():
+        shutil.rmtree(directory)
+
+def _copy_directory(source, destination):
+    if Path(source).exists():
+        shutil.copytree(source, destination)

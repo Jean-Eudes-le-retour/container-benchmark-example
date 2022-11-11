@@ -101,9 +101,13 @@ def record_animations(world_config, destination_directory, controller_name):
             break
 
     print("Closing the containers...")
-    # Closing Webots with SIGINT to trigger animation export
-    subprocess.run(['/bin/bash', '-c', 'docker exec "$( docker ps -f "ancestor=recorder-webots" -q )" pkill -SIGINT webots-bin'])
-    subprocess.run(['/bin/bash', '-c', 'docker kill "$( docker ps -f "ancestor=controller-webots" -q )"'])
+    webots_container_id = _get_container_id("recorder-webots")
+    if webots_container_id != '':
+        # Closing Webots with SIGINT to trigger animation export
+        subprocess.run(['/bin/bash', '-c', f'docker exec {webots_container_id} pkill -SIGINT webots-bin'])
+    controller_container_id = _get_container_id("controller-docker")
+    if controller_container_id != '':
+        subprocess.run(['/bin/bash', '-c', f'docker kill {controller_container_id}'])
 
     # *Restoring temporary file changes
     with open(world_config['file'], 'w') as f:
@@ -146,3 +150,8 @@ def _time_convert(time):
     cs = floor((seconds - absolute_seconds) * 100)
     cs_string = str(cs).zfill(2)
     return minutes_string + "." + seconds_string + "." + cs_string
+
+# function to get the container id of a running container
+def _get_container_id(container_name):
+    container_id = subprocess.check_output(['docker', 'ps', '-f', f'ancestor={container_name}', '-q']).decode('utf-8').strip()
+    return container_id
