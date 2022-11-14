@@ -11,5 +11,8 @@ ENV WEBOTS_CONTROLLER_URL=tcp://172.17.0.1:3005
 # Copies all the file of the current folder into the docker container
 COPY . .
 
+ARG DEFAULT_CONTROLLER
+ENV DEFAULT_CONTROLLER=$DEFAULT_CONTROLLER
+
 # Entrypoint command to launch default Python controller script
-ENTRYPOINT ["python3", "controllers/edit_me/edit_me.py"]
+ENTRYPOINT ["python3", "controllers/$DEFAULT_CONTROLLER/$DEFAULT_CONTROLLER.py"]

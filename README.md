@@ -46,17 +46,14 @@ You will then need to follow those steps:
 
 ### Benchmark specific files
 
-7. When a controller is evaluated, Webots and the controller are run inside [Docker containers](https://www.docker.com/resources/what-container/). There are two Dockerfiles at the root of the repository, "Dockerfile" for the Webots container and "controller_Dockerfile" for the controller container which contains their setup.
-   - If you want to use the default Dockerfiles:
-      1. Inside "[Dockerfile](../../edit/main/Dockerfile)", rename the world file name "robot_programming.wbt" to your world name
-      1. Inside "[controller_Dockerfile](../../edit/main/controller_Dockerfile)", change "edit_me" to your default controller name
-   - If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default webots.cloud Docker image already has the tools needed to compile and run C, C++ and Python controllers
-8. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
+7. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
    - file: put the relative path to your world file
    - maximum-duration: the maximum duration of an evaluation in seconds. Set it not large to avoid long evaluations of broken controllers but not too short to have enough time to finish the task
    - metric: should be one of "percent", "time-speed", "time-duration" or "distance". It depends on how the performance is evaluated
    - dockerCompose: it is a special path used by the integrated IDE and GitHub actions to locate the default controller. Change "edit_me" to the name of your main controller
    1. Don't forget to commit your changes to save them
+8. When a controller is evaluated, Webots and the controller are run inside [Docker containers](https://www.docker.com/resources/what-container/). There are two Dockerfiles at the root of the repository, "Dockerfile" for the Webots container and "controller_Dockerfile" for the controller container which contains their setup. The default Dockerfiles will launch a standard version of Webots and will look for a python controller with the default controller name defined in the webots.yml file for the robot.
+   - If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default webots.cloud Docker image already has the tools needed to compile and run C, C++ and Python controllers
 9. Replace the three files of the ![preview folder](/preview) with an example animation of your benchmark [recorded from Webots](https://cyberbotics.com/doc/guide/web-animation). Keep the same names for the files: animation.json, scene.x3d and thumbnail.jpg. ![Click here](../../upload/main/preview) to upload the new files to the preview folder from the web interface if that is more convenient for you.
 
 ### README update
