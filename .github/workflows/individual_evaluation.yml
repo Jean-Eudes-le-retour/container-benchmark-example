@@ -47,11 +47,13 @@ jobs:
 
       - name: Record and update Benchmark animations
         id: webots_test
-        run: |
-          python3 -u -m benchmark_record_action
-        env:
-          INPUT_FETCH_TOKEN: ${{ secrets.REPO_TOKEN }}
-          INPUT_PUSH_TOKEN: ${{ github.token }}
+        uses: cyberbotics/benchmark_record_action@dockerContainers
+        input:
+          individual_evaluation: 2:TotallyRandomGus/personal_benchmark:0.9166450554624533:91.66%:2022-11-11
+          default_controller: edit_me
+          project_path: /usr/local/webots-project          
+          fetch_token: ${{ secrets.REPO_TOKEN }}
+          push_token: ${{ github.token }}
         continue-on-error: true
 
       - name: Feedback on success

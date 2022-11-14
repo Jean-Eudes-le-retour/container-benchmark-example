@@ -48,8 +48,8 @@ You will then need to follow those steps:
 
 7. When a controller is evaluated, Webots and the controller are run inside [Docker containers](https://www.docker.com/resources/what-container/). There are two Dockerfiles at the root of the repository, "Dockerfile" for the Webots container and "controller_Dockerfile" for the controller container which contains their setup.
    - If you want to use the default Dockerfiles:
-      1. Inside "Dockerfile", rename the world file name "robot_programming.wbt" to your world name
-      1. Inside "controller_Dockerfile", change "edit_me" to your default controller name
+      1. Inside "[Dockerfile](../../edit/main/Dockerfile)", rename the world file name "robot_programming.wbt" to your world name
+      1. Inside "[controller_Dockerfile](../../edit/main/controller_Dockerfile)", change "edit_me" to your default controller name
    - If you need a special installation environment for your simulation or controller you can configure the Dockerfiles as needed. The default webots.cloud Docker image already has the tools needed to compile and run C, C++ and Python controllers
 8. Update the fields inside ![webots.yml](../../edit/main/webots.yml):
    - file: put the relative path to your world file
