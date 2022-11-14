@@ -48,7 +48,7 @@ jobs:
       - name: Record and update Benchmark animations
         id: webots_test
         uses: cyberbotics/benchmark_record_action@dockerContainers
-        input:
+        with:
           individual_evaluation: 2:TotallyRandomGus/personal_benchmark:0.9166450554624533:91.66%:2022-11-11
           default_controller: edit_me
           project_path: /usr/local/webots-project          
