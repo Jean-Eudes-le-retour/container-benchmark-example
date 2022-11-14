@@ -39,7 +39,7 @@ jobs:
       - name: Record and update Benchmark animations
         id: webots_test
         uses: cyberbotics/benchmark-record-action@dockerContainers
-        env:       
+        env:
           INPUT_FETCH_TOKEN: ${{ secrets.REPO_TOKEN }}
           INPUT_PUSH_TOKEN: ${{ github.token }}
         continue-on-error: true
