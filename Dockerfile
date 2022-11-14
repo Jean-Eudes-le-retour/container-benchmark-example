@@ -4,7 +4,7 @@ FROM leoduggan/webots.cloud-anim-edit:latest
 RUN mkdir -p /usr/local/webots-project
 COPY . /usr/local/webots-project
 
-RUN bash . /usr/local/webots-project/.github/world_name_regex.sh < /usr/local/webots-project/webots.yml
+RUN ["bash", "-c", ". /usr/local/webots-project/.github/world_name_regex.sh"]
 ENV WORLD_NAME=$WORLD_NAME
 
 # If called with no arguments, launch in headless mode
