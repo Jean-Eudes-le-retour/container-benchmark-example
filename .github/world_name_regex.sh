@@ -1,6 +1,6 @@
 #!/bin/bash
 
-yaml_file=$(<webots.yml)
+yaml_file=$1
 regex='file: worlds/(.+).wbt'
 if [[ $yaml_file =~ $regex ]]
 then
