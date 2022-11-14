@@ -13,6 +13,6 @@ COPY . .
 
 ARG DEFAULT_CONTROLLER
 ENV DEFAULT_CONTROLLER=$DEFAULT_CONTROLLER
-
+RUN echo $DEFAULT_CONTROLLER
 # Entrypoint command to launch default Python controller script
 ENTRYPOINT ["python3", "controllers/$DEFAULT_CONTROLLER/$DEFAULT_CONTROLLER.py"]
