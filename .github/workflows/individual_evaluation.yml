@@ -36,15 +36,6 @@ jobs:
           echo $solo_reference
           echo "INPUT_INDIVIDUAL_EVALUATION=$solo_reference" >> $GITHUB_ENV
 
-      - name: Fetch default controller name
-        run: bash .github/default_controller_name_regex.sh
-        continue-on-error: true
-
-      - name: Fetch environment variables from file
-        run: |
-          sed "" ./.github/variables.env >> $GITHUB_ENV
-        shell: bash
-
       - name: Record and update Benchmark animations
         id: webots_test
         uses: cyberbotics/benchmark-record-action@dockerContainers
@@ -68,7 +59,6 @@ jobs:
           body: |
             There was a problem. Look at action logs for more details:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
 
       - name: Delete request comment
         run: |
