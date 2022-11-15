@@ -4,8 +4,9 @@ FROM leoduggan/webots.cloud-anim-edit:latest
 RUN mkdir -p /usr/local/webots-project
 COPY . /usr/local/webots-project
 
+# The world file path is extracted from webots.yml and is given by the build-arg:
 ARG WORLD_PATH
-ENV WORLD_PATH=$WORLD_PATH
+ENV WORLD_PATH=${WORLD_PATH}
 
 # If called with no arguments, launch in headless mode
 #   (for instance, on the simulation server of webots.cloud, the GUI is launched to stream it to the user and a different command is used)
